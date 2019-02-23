@@ -35,7 +35,8 @@ function getConcertInfo() {
         if (response.data.length === 0) {
             console.log("\n=====================\n \nThis artist isn't currently touring! Please try another artist.\n\n===================\n");
         } else {
-            for (i = 0; i < results.length; i ++) {
+            for (i = 0; i < response.data.length; i ++) {
+                var results = response.data;
                 var currentResult = results[i];
                 var venueName = currentResult.venue.name;
                 var venueLocation = currentResult.venue.city + ", " + currentResult.venue.region + ", " + currentResult.venue.country;
@@ -49,7 +50,7 @@ function getConcertInfo() {
 
 function getSpotifyInfo() {
     if (secondInput === "") {
-        secondInput = "the sign"
+        secondInput = "The Sign, Ace of Base"
     }
     spotify.search({ 
         type: 'track', 
@@ -69,8 +70,9 @@ function getSpotifyInfo() {
   };
 
 function getMovieInfo() {
-    if (secondInput === " ") {
-        secondInput === "Mr. Nobody";
+    if (secondInput === "") {
+        secondInput = "Mr Nobody";
+        console.log(secondInput);
     };
 
     axios.get("http://www.omdbapi.com/?t=" + secondInput + "&apikey=trilogy").then(
@@ -79,21 +81,30 @@ function getMovieInfo() {
         var title = results.Title;
         var year = results.Year;
         var imdbRating = results.imdbRating;
+        var rating = response.data.Ratings[1].Value;
         var country = results.Country;
         var language = results.Language;
         var plot = results.Plot;
         var actors = results.Actors;
 
-     console.log("\n=================\n" + "\nTitle: " + title + "\nYear: " + year + "\nIMDB Rating: " + imdbRating + "\nCountry: " + country + "\nLanguage: " + language + "\nPlot: " + plot + "\nActors: " + actors + "\n\n=================\n")
+     console.log("\n====================\n" + "\nTitle: " + title + "\nYear: " + year + "\nIMDB Rating: " + imdbRating + "\nRotten Tomatoes: " + rating + "\nCountry: " + country + "\nLanguage: " + language + "\nPlot: " + plot + "\nActors: " + actors + "\n\n====================\n")
        }
-    );
+    )
+    .catch(function(error) {
+        console.log(error);
+    })
 };
 
 function readRandomFile() {
     fs.readFile('./random.txt', 'UTF8', function(err, data) {
         if (err) {
-            console.log("I can't read!");
-        }
-        getSpotifyInfo();
+            console.log(error);
+        };
+        var dataArr = data.split(",");
+        firstInput = dataArr[0];
+        secondInput = dataArr[1];
+        console.log("Input 1: " + dataArr[0]);
+        console.log("Input 2: " + dataArr[1]);
+        getSpotifyInfo(secondInput);
     });
 };
