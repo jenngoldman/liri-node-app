@@ -20,7 +20,7 @@ if (firstInput === "concert-this") {
     readRandomFile();
 }
 
-
+// ---------------------------------------------------------------------------------------------------
 // Functions.
 function getConcertInfo() {
     axios.get("https://rest.bandsintown.com/artists/" + secondInput + "/events?app_id=codingbootcamp").then(function(response) {
@@ -36,6 +36,20 @@ function getConcertInfo() {
     })
 };
 
+function getSpotifyInfo() {
+    var spotify = new Spotify(keys.spotify);
+    if (secondInput === "") {
+        secondInput = "The Sign";
+    }
+
+    spotify.search({ 
+        type: "track",
+        query: secondInput,
+        limit: 1
+    }).then(function(response) {
+        
+    });
+};
 
 function getMovieInfo() {
     if (secondInput === " ") {
@@ -58,4 +72,11 @@ function getMovieInfo() {
     );
 };
 
-// var spotify = new Spotify(keys.spotify) 
+function readRandomFile() {
+    fs.readFile('./random.txt', 'UTF8', function(err, data) {
+        if (err) {
+            console.log("I can't read!");
+        }
+        getSpotifyInfo();
+    });
+};
